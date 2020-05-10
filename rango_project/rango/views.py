@@ -1,11 +1,16 @@
-from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def home_view(request):
-    return HttpResponse(f"this is rango application homepage. <br>"
-                        f"<a href='/rango/about/'>About</a>.")
+    context = {
+        "boldmessage": "I am Rango"
+    }
+    return render(request, 'rango/home.html', context)
+
 
 def about_us(request):
-    return HttpResponse(f"Rango says here is the about page.<br>"
-                        f"<a href='/rango/home/'>Home</a>")
+    context = {
+        "name": "prabhat"
+    }
+    return render(request, 'rango/about.html', context)
