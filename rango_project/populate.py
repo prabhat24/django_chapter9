@@ -11,32 +11,21 @@ def add_page(category, title, url, views=0):
     (page, created) = Page.objects.get_or_create(category=category, title=title, url=url, views=views)
     if created:
         page.save()
-        return page
+    return page
 
 
-def add_category(name):
-    c = Category.objects.get_or_create(name=name)[0]
-    # if created:
-    #     category.save()
-    #     return category
-    return c
+def add_category(name, views, likes):
+    (cat_obj, created) = Category.objects.get_or_create(name=name, views=views, likes=likes)
+    if created:
+        print(f"category {name} created")
+    return cat_obj
+
 
 def populate():
-    category_list = [
-        {"name": "java"},
-        {"name": "js"},
-        {"name": "react"},
-        {"name": "unit_testing"},
-    ]
-
-    # category = models.ForeignKey(Category)
-    # title = models.CharField(max_length=120)
-    # url = models.URLField()
-    # views = models.IntegerField(default=0)
     java_pages = [
         {
             "title": "java variables",
-            "url": "",
+            "url": "https://www.javatpoint.com/java-variables",
             "views": 3
         }
     ]
@@ -48,17 +37,27 @@ def populate():
         },
         {
             "title": "js datatypes",
-            "url": "",
+            "url": "https://www.javatpoint.com/javascript-variable",
             "views": 2
         }
     ]
-    categories = {
-        "java": java_pages,
-        "js": js_pages
-    }
-    for category_name, pages_attached in categories.items():
-        new_category = add_category(category_name)
-        for page in pages_attached:
+    categories = [
+        {
+            "name": "java",
+            "pages": java_pages,
+            "views": 2,
+            "likes": 0
+        },
+        {
+            "name": "js",
+            "pages": js_pages,
+            "views": 20,
+            "likes": 5
+        }
+    ]
+    for cat_dict in categories:
+        new_category = add_category(cat_dict.get("name"), cat_dict.get("views"), cat_dict.get("likes"))
+        for page in cat_dict.get("pages"):
             add_page(new_category, page.get("title"), page.get("url"), page.get("views"))
 
 
@@ -72,5 +71,5 @@ def print_info():
 
 
 if __name__ == "__main__":
-    print("starting reango popuating script...")
+    print("starting rango population script...")
     populate()
