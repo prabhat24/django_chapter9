@@ -1,3 +1,5 @@
 __pycache__
 .idea/
 */*.sqlite3
+._.DS_Store
+**/._.DS_Store

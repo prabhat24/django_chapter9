@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+    <title>Rango</title>
+</head>
+<body>
+{% if category %}
+<h1>{{ category.name }}</h1> likes-{{ category.likes }} views-{{ category.views }}
+<div>
+    <ul>
+        {% for page in pages %}
+        <li><a href="{{ page.url }}">{{ page.title }} likes - {{page.likes}} views {{ page.views }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% else %}
+<strong>category not found</strong>
+{% endif %}
+<div><a href="/rango/about/">About</a><br/></div>
+</body>
+</html>

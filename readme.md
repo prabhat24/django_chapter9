@@ -1,8 +1,7 @@
-<h3>objective chapter 3 Models and Databases</h3>
-1. first tell Django about the database you intend to use (i.e. configure DATABASES in settings.py) <br>
-2. First, create your new model(s) in your Django application’s models.py file. (categories and pages)  <br>
-3. Update admin.py to include and register your new model(s). <br>
-4. Perform the migration ```$python manage.py makemigrations <app_name>```.<br>
-5. Apply the changes ```$ python manage.py migrate```. This will create the necessary infrastruc-
-ture within the database for your new model(s).<br>
-6. Create/edit your population script for your new model(s).<br>
+<h3>objective chapter 4 Models, Templates and Views</h3>
+<ul>
+<li>Update the population script to add some value to the views count for each page</li>
+<li>Modify the index page to also include the top 5 most viewed pages</li>
+<li>Include a heading for the “Most Liked Categories” and “Most Viewed Pages”</li>
+<li>Include a link back to the index page from the category page.</li>
+</ul>
