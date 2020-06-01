@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>add category</title>
+</head>
+<body>
+<form method="POST" action="/rango/add_category/" >
+    {% csrf_token %}
+    {% for item in form.visible_fields %}
+        {{ item.errors }}
+        {{ item.help_text }}
+        {{ item }}
+    {% endfor %}
+    {% for field in form.hidden_fields %}
+        {{ field }}
+    {% endfor %}
+    <input type="submit" name="submit" value="Create Category">
+</form>
+</body>
+</html>
