@@ -1,14 +1,13 @@
-<!DOCTYPE html>
+{% extends "rango/base.html" %}
 {% load staticfiles %}
-<html>
-<head>
-    <title>Rango</title>
-</head>
-<body>
+{% block title_block %}
+home
+{% endblock %}
+{% block body_block %}
 <h1>Rango says...</h1>
 <div>
     hey there partner! <br/> <strong>{{ boldmessage }}</strong><br/>
-    <img src="{% static " images/rango_the_mascot.jpeg" %}" alt= "the picture not found"/>
+    <img src="{% static 'images/rango_the_mascot.jpeg' %}" alt= "the picture not found"/>
 </div>
 <div>
     {% if categories %}
@@ -22,6 +21,7 @@
     <strong>There are no categories present.</strong>
     {% endif %}
 </div>
+
 <div>
     {% if pages %}
     <ul>
@@ -34,9 +34,5 @@
     <strong>There are no pages present.</strong>
     {% endif %}
 </div>
-<div>
-    <a href="/rango/add_category/"> Add Category</a>
-</div>
-<div><a href="/rango/about/">About</a><br/></div>
-</body>
-</html>
+{% endblock %}
+
