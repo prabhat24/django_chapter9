@@ -4,9 +4,7 @@
     category
 {% endblock %}
 {% block menu_list %}
-    <li class="nav-item active">
-        <a class="nav-link" href="{% url 'rango:add_page' category_name_slug %}">Add Page<span class="sr-only">(current)</span></a>
-    </li>
+    <a class="dropdown-item" href="{% url 'rango:add_page' category_name_slug %}">Add Page</a>
 {% endblock %}
 {% block body_block %}
     {% if category %}

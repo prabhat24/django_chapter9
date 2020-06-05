@@ -1,7 +1,10 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .models import Page, Category
-from .forms import CategoryForm, PageForm
+from .forms import CategoryForm, PageForm, UserProfileForm, UserForm
+from django.contrib.auth import authenticate, login, logout
+from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 
 def home_view(request):
@@ -15,7 +18,6 @@ def home_view(request):
     context = {
         "categories": five_cat,
         "pages": five_pages,
-        "boldmessage": "Prabhat"
     }
     return render(request, 'rango/home.html', context)
 
@@ -30,7 +32,7 @@ def view_category(request, category_name_slug):
 
     context = {
         "category": category,
-        "category_name_slug" : category_name_slug,
+        "category_name_slug": category_name_slug,
         "pages": related_pages
     }
     return render(request, "rango/category.html", context)
@@ -43,6 +45,7 @@ def about_us(request):
     return render(request, 'rango/about.html', context)
 
 
+@login_required
 def add_category(request):
     form = CategoryForm()
 
@@ -61,6 +64,7 @@ def add_category(request):
     return render(request, "rango/add_category.html", context)
 
 
+@login_required
 def add_page(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -73,12 +77,78 @@ def add_page(request, category_name_slug):
             page = form.save(commit=False)
             page.category = category
             page.save()
-            return view_category(request,category_name_slug)
+            return view_category(request, category_name_slug)
         else:
             print(f"errors {form.errors}")
     context = {
         "form": form,
-        "category" : category,
-        "category_name_slug" : category_name_slug
+        "category": category,
+        "category_name_slug": category_name_slug
     }
     return render(request, f"rango/add_page.html", context)
+
+
+def register_user(request):
+    registered = False
+
+    if request.method == "POST":
+        # get user data
+        user_form = UserForm(data=request.POST)
+        user_profile_form = UserProfileForm(data=request.POST)
+
+        if user_form.is_valid() and user_profile_form.is_valid():
+            user = user_form.save(commit=False)
+            user.set_password(user.password)
+            user.save()
+
+            user_profile = user_profile_form.save(commit=False)
+            # populate user field
+            user_profile.user = user
+            # populate user's profile_image
+            if 'profile_image' in request.FILES:
+                user_profile.profile_image = request.FILES['profile_image']
+            user_profile.save()
+            registered = True
+        else:
+            # if the either of the forms are not valid
+            print(f"errors: {user_form.errors}, {user_profile_form.errors}")
+    else:
+        # if the method is get
+        user_form = UserForm()
+        user_profile_form = UserProfileForm()
+
+    context = {
+        "user_form": user_form,
+        "user_profile_form": user_profile_form,
+        "registered": registered
+    }
+    return render(request, "rango/register.html", context)
+
+
+def user_login(request):
+    error_msg = ""
+    if request.method == "POST":
+        username = request.POST.get('login_username')
+        password = request.POST.get('login_password')
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('rango:home'))
+            else:
+                error_msg = f" username {username} is invalid contact administrator"
+                print(error_msg)
+        else:
+            error_msg = f" invalid username {username} and password"
+            print(error_msg)
+    context = {
+        "error_msg": error_msg
+    }
+    return render(request, "rango/login.html", context)
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('rango:home'))
