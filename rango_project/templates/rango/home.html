@@ -9,6 +9,12 @@ home
         <img src="{% static 'images/rango_the_mascot.jpeg' %}" alt= "the picture not found"/>
     </div>
     <div>
+        {% if visits %}
+            <p>visits : {{ visits }}</p>
+            <p>last updated on : {{ last_visit_date }}</p>
+        {% endif %}
+    </div>
+    <div>
         {% if categories %}
         <ul>
             <h3>most visited categories</h3>

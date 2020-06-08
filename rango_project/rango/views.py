@@ -5,6 +5,7 @@ from .forms import CategoryForm, PageForm, UserProfileForm, UserForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 
 def home_view(request):
@@ -19,7 +20,9 @@ def home_view(request):
         "categories": five_cat,
         "pages": five_pages,
     }
-    return render(request, 'rango/home.html', context)
+    context.update(updated_visits_cookie_handler(request))
+    response = render(request, 'rango/home.html', context)
+    return response
 
 
 def view_category(request, category_name_slug):
@@ -152,3 +155,48 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('rango:home'))
+
+
+def visits_cookie_handler(request, response):
+    visits = request.COOKIES.get('visits', None)
+    last_visit_date = request.COOKIES.get('last_visit_date', None)
+    if visits is None or last_visit_date is None:
+        response.set_cookie('visits', 1)
+        response.set_cookie('last_visit_date', datetime.strftime(datetime.now(), '%d%m%Y, %H:%M:%S'))
+        return
+
+    date_last_visit_date = datetime.strptime(last_visit_date, '%d%m%Y, %H:%M:%S')
+    if (datetime.now() - date_last_visit_date).seconds > 10:
+        visits = int(visits) + 1
+        last_visit_date = datetime.strftime(datetime.now(), '%d%m%Y, %H:%M:%S')
+        response.set_cookie('visits', visits)
+        response.set_cookie('last_visit_date', last_visit_date)
+
+
+def get_server_side_cookie(request, key, default_val):
+    val = request.session.get(key)
+    if not val:
+        val = default_val
+    return val
+
+
+def updated_visits_cookie_handler(request):
+    visits = get_server_side_cookie(request, 'visits', None)
+    last_visit_date = get_server_side_cookie(request, 'last_visit_date', None)
+
+    if visits is None or last_visit_date is None:
+        visits = 1
+        last_visit_date = datetime.strftime(datetime.now(), '%d/%m/%Y, %H:%M:%S')
+        request.session['visits'] = visits
+        request.session['last_visit_date'] = last_visit_date
+
+    date_last_visit_date = datetime.strptime(last_visit_date, '%d/%m/%Y, %H:%M:%S')
+    if (datetime.now() - date_last_visit_date).seconds > 10:
+        visits = int(visits) + 1
+        last_visit_date = datetime.strftime(datetime.now(), '%d/%m/%Y, %H:%M:%S')
+        request.session['visits'] = visits
+        request.session['last_visit_date'] = last_visit_date
+    return {
+        "visits" : visits,
+        "last_visit_date" : last_visit_date
+    }
