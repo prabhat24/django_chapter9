@@ -197,6 +197,6 @@ def updated_visits_cookie_handler(request):
         request.session['visits'] = visits
         request.session['last_visit_date'] = last_visit_date
     return {
-        "visits" : visits,
-        "last_visit_date" : last_visit_date
+        "visits": visits,
+        "last_visit_date": last_visit_date
     }
