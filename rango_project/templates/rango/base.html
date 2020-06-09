@@ -27,7 +27,7 @@
                                 <a class="dropdown-item" href="{% url 'rango:add_category' %}">Add Category</a>
                                 {% block menu_list %}
                                 {% endblock %}
-                                <a class="dropdown-item" href="{% url 'rango:logout' %}">logout</a>
+                                <a class="dropdown-item" href="{% url 'auth_logout' %}?next=/rango/">logout</a>
                             </div>
                         </li>
                     {% else %}
@@ -36,8 +36,8 @@
                                hey anonymous!!
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
-                              <a class="dropdown-item" href="{% url 'rango:register' %}">Register</a>
-                              <a class="dropdown-item" href="{% url 'rango:login' %}">Login</a>
+                              <a class="dropdown-item" href="{% url 'registration_register' %}">Register</a>
+                              <a class="dropdown-item" href="{% url 'auth_login' %}">Login</a>
                             </div>
                         </li>
                     {% endif %}

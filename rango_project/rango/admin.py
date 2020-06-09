@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import Category, Page, UserProfile
+from .models import Category, Page
 
 admin.site.register(Category)
 admin.site.register(Page)
-admin.site.register(UserProfile)
 
 # Register your models here.

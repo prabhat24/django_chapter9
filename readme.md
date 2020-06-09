@@ -1,6 +1,4 @@
-<h3>objective chapter 8 Cookies and Sessions</h3>
+<h3>objective chapter 9 Django Regitration Redux</h3>
 <ul>
-<li>set up client side cookies ("visits" and "last_visit_date")</li>
-<li>set up session based cookies</li>
-<li><a href="">notes chapter 8 Cookies and Sessions</a></li>
+<li>refactor and change registration with registration Redux</li>
 </ul>
