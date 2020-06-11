@@ -1,43 +1,56 @@
-{% extends "rango/base.html" %}
+{% extends "rango/base_bootstrap.html" %}
 {% load staticfiles %}
 {% block title_block %}
 home
 {% endblock %}
 {% block body_block %}
-<h1>Rango says...</h1>
-    <div style = "width:50%; padding-left:5%; padding-top: 0.7%;">
-        <img src="{% static 'images/rango_the_mascot.jpeg' %}" alt= "the picture not found"/>
-    </div>
-    <div>
-        {% if visits %}
-            <p>visits : {{ visits }}</p>
-            <p>last updated on : {{ last_visit_date }}</p>
-        {% endif %}
-    </div>
-    <div>
+<div class="jumbotron">
+    <h1>Rango says...</h1>
+    {% if user.is_authenticated %}
+        hey {{ user.username }}!
+    {% else %}
+        hey partner!
+    {% endif %}
+</div>
+<div class="row marketing">
+    <div class="col-lg-6">
         {% if categories %}
-        <ul>
-            <h3>most visited categories</h3>
+        <ul class="list-group">
+            <li class="list-group-item active"><h5>most visited categories</h5> </li>
             {% for category in categories %}
-            <li> <a href="{% url 'rango:view_category' category.slug %}">{{ category.name }}</a></li>
+            <li class="list-group-item"><a href="{% url 'rango:view_category' category.slug %}">{{ category.name }}</a>
+            </li>
             {% endfor %}
         </ul>
         {% else %}
         <strong>There are no categories present.</strong>
         {% endif %}
     </div>
-
-    <div>
+    <div class="col-lg-6">
         {% if pages %}
-        <ul>
-            <h3>most visited pages</h3>
+        <ul class="list-group">
+            <li class="list-group-item active"> <h5>most visited pages</h5> </li>
             {% for page in pages %}
-            <li> <a href="{{ page.url }}">{{ page.title }}</a></li>
+            <li class="list-group-item"><a href="{{ page.url }}">{{ page.title }}</a></li>
             {% endfor %}
         </ul>
         {% else %}
         <strong>There are no pages present.</strong>
         {% endif %}
     </div>
+</div>
+{% endblock %}
+{% block sidebar_block %}
+<div style="padding-left:2%; padding-top:2%">
+    <div style="width:25%, height:25%">
+        <img src="{% static 'images/rango_the_mascot.jpeg' %}" alt="the picture not found" width="80%"/>
+    </div>
+    <div>
+        {% if visits %}
+        <p>visits : {{ visits }}</p>
+        <p>last updated on : {{ last_visit_date }}</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
 
